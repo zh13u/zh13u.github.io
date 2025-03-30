@@ -1,0 +1,26 @@
+.music-player {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+  }
+  .player-bg {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  #progress-bar {
+    width: 100%;
+  }

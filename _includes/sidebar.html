@@ -39,6 +39,29 @@
       {% endfor %}
     </ul>
   </nav>
+  
+
+  <!-- Music Player -->
+   <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ '/assets/css/music.css' | relative_url }}">
+
+  <!-- Custom JavaScript -->
+  <script defer src="{{ '/assets/js/music.js' | relative_url }}"></script>
+  
+  <div id="music-player" class="music-player">
+    <img src="/assets/img/favicons/OIP.jpg" class="player-bg" alt="Music Background">
+    <audio id="audio-player"></audio>
+    <div class="controls">
+        <button id="prev-btn">⏮️</button>
+        <button id="play-pause-btn">▶️</button>
+        <button id="next-btn">⏭️</button>
+    </div>
+    <input type="range" id="progress-bar" value="0">
+    <div class="time-info">
+        <span id="current-time">0:00</span>
+        <span id="total-time">0:00</span>
+    </div>
+</div>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
     {% unless site.theme_mode %}
@@ -95,3 +118,4 @@
   <!-- .sidebar-bottom -->
 </aside>
 <!-- #sidebar -->
+
