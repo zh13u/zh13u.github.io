@@ -212,44 +212,45 @@ function updateSidebarSelection() {
 // Xử lý chuyển trang AJAX mà không thay thế trình phát nhạc
 document.addEventListener("click", (event) => {
     const link = event.target.closest("a");
-    if (link && link.getAttribute("href") && !link.getAttribute("href").startsWith("#")) {
-        event.preventDefault();
 
-        fetch(link.getAttribute("href"))
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Lỗi HTTP! trạng thái: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(html => {
-                const parser = new DOMParser();
-                const newDocument = parser.parseFromString(html, "text/html");
-                const newContent = newDocument.getElementById("main-wrapper");
+    if (!link || !link.getAttribute("href")) return;
 
-                // Chỉ thay thế nội dung của main-wrapper, không thay trình phát nhạc
-                const mainWrapper = document.getElementById("main-wrapper");
-                if (mainWrapper && newContent) {
-                    mainWrapper.innerHTML = newContent.innerHTML;
-
-                    // Khởi tạo lại các script hoặc thành phần cho nội dung mới
-                    initializeNewContent();
-                } else {
-                    console.error("Không tìm thấy main-wrapper trong trang mới.");
-                    alert("Lỗi: Không thể tải nội dung mới.");
-                }
-
-                // Cập nhật lịch sử trình duyệt
-                history.pushState(null, "", link.getAttribute("href"));
-
-                // Cập nhật trạng thái sidebar ngay lập tức
-                updateSidebarSelection();
-            })
-            .catch(err => {
-                console.error("Không thể tải trang:", err);
-                alert("Lỗi: Không thể tải trang.");
-            });
+    // Kiểm tra nếu link trỏ đến trang bên ngoài
+    const isExternal = link.hostname !== window.location.hostname;
+    if (isExternal) {
+        return; // Không ngăn trình duyệt mở tab mới
     }
+
+    event.preventDefault(); // Ngăn tải lại trang với link nội bộ
+
+    fetch(link.getAttribute("href"))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            const parser = new DOMParser();
+            const newDocument = parser.parseFromString(html, "text/html");
+            const newContent = newDocument.getElementById("main-wrapper");
+
+            const mainWrapper = document.getElementById("main-wrapper");
+            if (mainWrapper && newContent) {
+                mainWrapper.innerHTML = newContent.innerHTML;
+                initializeNewContent();
+            } else {
+                console.error("Không tìm thấy main-wrapper trong trang mới.");
+                alert("Lỗi: Không thể tải nội dung mới.");
+            }
+
+            history.pushState(null, "", link.getAttribute("href"));
+            updateSidebarSelection();
+        })
+        .catch(err => {
+            console.error("Không thể tải trang:", err);
+            alert("Lỗi: Không thể tải trang.");
+        });
 });
 
 // Xử lý điều hướng trình duyệt (back/forward)
