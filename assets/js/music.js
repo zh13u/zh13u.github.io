@@ -6,7 +6,18 @@ const progressBar = document.getElementById('progress-bar');
 const currentTimeEl = document.getElementById('current-time');
 const totalTimeEl = document.getElementById('total-time');
 
-const songs = ["Umi_no_Koe.mp3", "Ai_wo_Komete_Umi.mp3", "Inochi_no_Namae.mp3", "Sayonara_no_Natsui.mp3", "Suzume.mp3"];
+const songs = ["Umi_no_Koe.mp3",
+               "Ai_wo_Komete_Umi.mp3",
+               "Inochi_no_Namae.mp3",
+               "Lemon.mp3",
+               "Kokoronashi.mp3",
+               "Sayonara_no_Natsui.mp3",
+               "Suzume.mp3",
+               "Uchiage_hanabi.mp3",
+               "Haiiro_to_Ao.mp3",
+               "Kamado_Tanjiro_no_Uta.mp3",
+               "Missing_You.mp3"
+];
 let songIndex = localStorage.getItem("currentSong") ? parseInt(localStorage.getItem("currentSong")) : 0;
 
 // Biến để theo dõi xem người dùng đã tương tác với trang chưa
