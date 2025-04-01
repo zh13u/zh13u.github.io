@@ -6,7 +6,7 @@ const progressBar = document.getElementById('progress-bar');
 const currentTimeEl = document.getElementById('current-time');
 const totalTimeEl = document.getElementById('total-time');
 
-const songs = ["Ai_wo_Komete_Umi.mp3", "Inochi_no_Namae.mp3", "Sayonara_no_Natsui.mp3", "Suzume.mp3"];
+const songs = ["Umi_no_Koe.mp3", "Ai_wo_Komete_Umi.mp3", "Inochi_no_Namae.mp3", "Sayonara_no_Natsui.mp3", "Suzume.mp3"];
 let songIndex = localStorage.getItem("currentSong") ? parseInt(localStorage.getItem("currentSong")) : 0;
 
 // Biến để theo dõi xem người dùng đã tương tác với trang chưa
