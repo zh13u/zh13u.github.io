@@ -169,8 +169,13 @@ window.addEventListener("DOMContentLoaded", () => {
     // Nếu nhạc đang phát trước khi tải lại, tiếp tục phát
     if (savedPlaying) {
         setTimeout(() => {
-            audio.play();
-            playPauseBtn.textContent = "⏸";
+            audio.play().catch(err => {
+                console.warn("Không thể tự động phát nhạc:", err.message);
+            });
+
+            const icon = playPauseBtn.querySelector("i");  // Lấy thẻ <i> trong nút play-pause
+            icon.classList.remove('fa-play');  // Xóa icon play
+            icon.classList.add('fa-pause');   // Thêm icon pause
         }, 500); // Thêm độ trễ nhỏ để đảm bảo audio đã tải xong
     }
 });
