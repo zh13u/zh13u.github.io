@@ -68,12 +68,17 @@ function loadSong(index, resumeTime = 0, autoplay = false) {
 
 function playPause() {
     // Phát hoặc tạm dừng bài hát
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const icon = playPauseBtn.querySelector('i'); // Lấy phần tử icon bên trong nút
+
     if (audio.paused) {
         audio.play();
-        playPauseBtn.textContent = "⏸";
+        icon.classList.remove('fa-play'); // Xóa icon play
+        icon.classList.add('fa-pause');  // Thêm icon pause
     } else {
         audio.pause();
-        playPauseBtn.textContent = "▶️";
+        icon.classList.remove('fa-pause'); // Xóa icon pause
+        icon.classList.add('fa-play');    // Thêm icon play
     }
 }
 
@@ -134,7 +139,8 @@ window.addEventListener("DOMContentLoaded", () => {
             audio.play().catch(err => {
                 console.warn("Không thể tự động phát nhạc:", err.message);
             });
-            playPauseBtn.textContent = "⏸";
+            icon.classList.remove('fa-play'); // Xóa icon play
+            icon.classList.add('fa-pause');  // Thêm icon pause
         }, 500); // Thêm độ trễ nhỏ để đảm bảo audio đã tải xong
     }
 });
