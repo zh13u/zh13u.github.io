@@ -43,7 +43,9 @@ function loadSong(index, resumeTime = 0, autoplay = false) {
                     audio.play().catch(err => {
                         console.warn("Không thể tự động phát nhạc:", err.message);
                     });
-                    playPauseBtn.textContent = "⏸";
+                    const icon = playPauseBtn.querySelector("i");  // Lấy thẻ <i> trong nút play-pause
+                    icon.classList.remove('fa-play');  // Xóa icon play
+                    icon.classList.add('fa-pause');   // Thêm icon pause
                 }
                 return;
             }
@@ -55,7 +57,9 @@ function loadSong(index, resumeTime = 0, autoplay = false) {
                     audio.play().catch(err => {
                         console.warn("Không thể tự động phát nhạc:", err.message);
                     });
-                    playPauseBtn.textContent = "⏸";
+                    const icon = playPauseBtn.querySelector("i");
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
                 }
             }, { once: true });
         })
