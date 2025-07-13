@@ -54,8 +54,8 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/endo.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-	name: "Lorem Ipsum",
-	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	name: "nd0",
+	bio: "CTF player | Student",
 	links: [
 		// {
 		// 	name: "Twitter",
@@ -87,11 +87,11 @@ export const profileConfig: ProfileConfig = {
 	],
 };
 
-// export const licenseConfig: LicenseConfig = {
-// 	enable: true,
-// 	name: "CC BY-NC-SA 4.0",
-// 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-// };
+export const licenseConfig: LicenseConfig = {
+	enable: true,
+	name: "CC BY-NC-SA 4.0",
+	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+};
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
