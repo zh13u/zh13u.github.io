@@ -6,6 +6,7 @@ import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import TerminalBanner from "../components/TerminalBanner.svelte";
 import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
 import {
@@ -58,6 +59,11 @@ const mainPanelTop = siteConfig.banner.enable
     >
     </ImageWrapper>
 </div>}
+
+<!-- Terminal Banner - Overlay on top of banner -->
+<div id="terminal-banner-wrapper" class="absolute z-20 w-full flex justify-center items-center" style={`top: ${BANNER_HEIGHT}vh; transform: translateY(-50%);`}>
+    <TerminalBanner client:load />
+</div>
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
