@@ -16,6 +16,8 @@ in the photo metadata challenge, I used `exiftool` to extract metadata from the 
 
 ![image](./image/cookiearenactffor/131.png)
 
+flag: `Flag{metadataratatatataaaaaa}` => `CHH{metadataratatatataaaaaa}`
+
 ---
 
 ## Streamer
@@ -55,3 +57,33 @@ d9 9e fd 2a a9 09 eb 38  c0 aa 1a af fa d8 40 d4
 ```
 
 after i used `hxd` to create `evilcontent.zip` file 
+
+![image](./image/cookiearenactffor/135.png)
+
+but here we need `password`, i tried to get `password` of that account and got `flag`
+
+`password: truongvinhcuc`
+
+flag: `Flag{TCP_streamin_go_skrrrrrrrt}` => `CHH{TCP_streamin_go_skrrrrrrrt}`
+
+---
+
+## Online Camera
+
+we get 1 picture of `webcam` at a `building`, we need to fill in the `name` of that `building` in a template format, i searched and it is `Notre Dame`
+
+![image](./image/cookiearenactffor/136.png)
+
+Flag: `CHH{Notre_Dame}`
+
+---
+
+## ExSeller
+
+As described, we can know that excel files are compressed format, we can change the extension and decompress and find everything inside.
+
+![image](./image/cookiearenactffor/137.png)
+
+Flag: `Flag{Micro$oft_Heck3r_Man}` => `CHH{Micro$oft_Heck3r_Man}`
+
+---
