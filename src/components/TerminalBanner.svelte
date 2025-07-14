@@ -154,17 +154,20 @@ function updateTime() {
 }
 
 function getTimeParts() {
-  const now = new Date();
-  const offset = -now.getTimezoneOffset() / 60;
-  const offsetStr = offset === 0 ? 'UTC' : `UTC${offset > 0 ? '+' : ''}${offset}`;
-  const pad = n => n.toString().padStart(2, '0');
-  const dateStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-  const hourStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  return { dateStr, hourStr, offsetStr };
+	const now = new Date();
+	const offset = -now.getTimezoneOffset() / 60;
+	const offsetStr =
+		offset === 0 ? "UTC" : `UTC${offset > 0 ? "+" : ""}${offset}`;
+	const pad = (n) => n.toString().padStart(2, "0");
+	const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+	const hourStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+	return { dateStr, hourStr, offsetStr };
 }
 
 $: timeParts = getTimeParts();
-setInterval(() => { timeParts = getTimeParts(); }, 1000);
+setInterval(() => {
+	timeParts = getTimeParts();
+}, 1000);
 
 // Bắt đầu animation
 typeTerminal();
