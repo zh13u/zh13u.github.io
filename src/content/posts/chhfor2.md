@@ -1,6 +1,6 @@
 ---
 title: CookieArena CTF (2)
-published: 2024-11-29
+published: 2024-11-30
 category: Writeups
 tags: [forensics, cookiearena, ctf]
 image: "./image/titles/logo-cookiehanhoan.png"
