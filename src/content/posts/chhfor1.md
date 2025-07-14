@@ -1,5 +1,5 @@
 ---
-title: CookieArena CTF
+title: CookieArena CTF (1)
 published: 2024-11-29
 category: Writeups
 tags: [forensics, cookiearena, ctf]
