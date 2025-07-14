@@ -1,6 +1,6 @@
 ---
 title: CookieArena CTF
-published: 2024-11-28
+published: 2024-11-27
 category: Writeups
 tags: [web, cookiearena, ctf, misc, tutorial]
 image: "./image/titles/logo-cookiehanhoan.png"
