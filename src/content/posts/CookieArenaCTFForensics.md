@@ -5,7 +5,7 @@ category: Writeups
 tags: [forensics, cookiearena, ctf]
 image: "./image/titles/logo-cookiehanhoan.png"
 description: Some cool and fun forensics challenges from cookie arena.
-draft: false
+draft: true
 ---
 
 # CookieArena CTF Forensics
