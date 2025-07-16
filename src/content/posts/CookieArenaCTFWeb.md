@@ -874,5 +874,3 @@ and done.
 `flag` will be found in `mysecret` in the provided files
 
 ![image](./image/cookiearenactf/44.png)
-
----
