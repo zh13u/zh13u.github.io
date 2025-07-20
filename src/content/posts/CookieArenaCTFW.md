@@ -501,3 +501,21 @@ app.run(host='0.0.0.0', port=1337)
 #     ENTRYPOINT ["uwsgi", "--socket", "0.0.0.0:8000", "--protocol=http", "--threads", "4", "--wsgi-file", "app.py"]
 ```
 
+From the system code, we can see that we can query user information via `/get_info`, if it is `GET`, it will return the information immediately, if it is `POST`, the system will send requests to `requests.get(f'{API_HOST}/api/user/{userid}`, and `userid` is the field we enter, But look again, `FLAG` is at `/api/flag`, so the vulnerability is in the `userid` we enter, exploit `pathtraversal` here to return to `/api/flag`
+
+![image](./image/cookiearenaweb/28.png)
+
+---
+
+## Duplicate Content
+
+In this challenge we see that if we log in as `guest`, we only see `title 4` with data. If we try other ids, the returned status code is `404` or `500`. Accordingly, if we click clone, we can clone the `blog` at the id using the `id` parameter. Try with other `ids` to clone indirectly.
+
+![image](./image/cookiearenaweb/29.png)
+
+![image](./image/cookiearenaweb/30.png)
+
+![image](./image/cookiearenaweb/31.png)
+
+---
+
