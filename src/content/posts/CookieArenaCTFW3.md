@@ -212,7 +212,3 @@ in this `command injection` challenge we have bypassed the ways to chain `comman
 ![image](./image/cookiearenaweb/66.png)
 
 ---
-
-## Blind Command Injection
-
----
