@@ -12,7 +12,7 @@ draft: false
 
 ## Web_0
 
-chúng ta được cung cấp 1 file `index.php`:
+We are provided with 1 file `index.php`:
 ```php
 <?php
 error_reporting(0);
@@ -41,44 +41,47 @@ $sql = @mysqli_fetch_assoc(mysqli_query($db,"SELECT * FROM users WHERE username=
 ?>
 ```
 
-web hoạt động như truy vấn thông tin tài khoản trong `database` bằng cách truyền vào `url` theo phương thức `GET` các tham số `user` và `pass` để thực hiện truy vấn
+web works like querying account information in `database` by passing `url` in `GET` method the parameters `user` and `pass` to perform the query
 
-trong code bao gồm các thông tin:
-- `error_reporting(0);`: là tắt toàn bộ thông báo lỗi, điều này xảy ra khi ta chèn lỗi thì hệ thống vẫn `status 200` nhưng k trả về gì trong thử thách 
-- `check($input)`: hàm `check` kiểm tra đầu vào và thiết lập danh sách cấm các kí tự, chuỗi, hàm trong `$forbid` và cả các dấu `comment` và khoảng trắng, nếu các phần tử có xuất hiện trong `$forbid` đều ra thông báo `forbidden`.
-- nếu câu truy vấn thành công và đúng thì sẽ hiển thị ra thông báo `welcome`, còn sai thì `wrong`.
+in the code includes the following information:
 
-thoạt nhìn vào danh sách cấm thì có lẽ đây là một thử thách khó về `sql injection`, hãy thử từng bước:
-- bắt đầu với: `admin'or'1'='1` (chúng ta có thể truy vấn k cần khoảng cách)
+- `error_reporting(0);`: is to turn off all error messages, this happens when we insert an error, the system still `status 200` but does not return anything in the challenge
+
+- `check($input)`: the `check` function checks the input and sets up a list of prohibited characters, strings, functions in `$forbid` and also `comment` and whitespace, if the elements appear in `$forbid`, it will display the message `forbidden`.
+
+- If the query is successful and correct, it will display the message `welcome`, otherwise it will display `wrong`.
+
+at first glance at the blacklist this might seem like a difficult `sql injection` challenge, let's try it step by step:
+- start with: `admin'or'1'='1` (we can query without spaces)
 
 ![image](./image/ptitctf2025/1.png)
 
-kết quả chúng ta đã thành công và nhận thông báo `welcome`. Vậy tiếp theo nên khai thác như nào?
-Ta có thể thấy bị chặn gần như mọi thứ, để biết được trong database hiện tại có còn bảng gì k tôi đã dùng tới: `'or((select(min(1))from`T`)>0)='1` với T chính là bảng cần xem có tồn tại hay k và kèm theo đó là kiểm tra bảng có dữ liệu hay k, tất nhiên đây là đoán và may là có thể thấy được có tồn tại 1 bảng `flag`, thực nghiệm trên trường `pass`
+The result is that we succeeded and received the `welcome` message. So what should we do next?
+We can see that almost everything is blocked, to know if there is any table in the current database, I used: ```'or((select(min(1))from`T`)>0)='1``` with `T` being the table to check if it exists or not and along with that is checking if the table has data or not, of course this is a guess and luckily we can see that there is a `flag` table, tested on the `pass` field
 
 ![image](./image/ptitctf2025/2.png)
 
-và tương tự ta có thể tìm được cột trong `flag` là `flag`, tận dụng điều đó ta có thể tìm được độ dài flag là 27 và bắt đầu từ `PTITCTF{`
+and similarly we can find the column in `flag` is `flag`, taking advantage of that we can find the length of flag is 27 and starts from `PTITCTF{`
 
 ![image](./image/ptitctf2025/3.png)
 
 ![image](./image/ptitctf2025/4.png)
 
-đến đây tôi cũng đã tận dụng hàm `like` để bruteforce tìm flag nhưng mất rất nhiều rào cản vì bị cấm rất nhiều, nêu bạn có thể tìm được kí tự bị cấm chẳng hạn như `_` hay `b|x|y|z` thì cũng k thể tìm được kí tự sau đó nữa. Đến đây tôi đã đọc lại code và phát hiện có một logic code giúp ta có thể khai thác bằng cách `bruteforce`, hãy quan sát vào `$forbid`, tại sao k dồn hết vào 1 hàng mà dùng nối chuỗi? Nếu kĩ hơn ta có thể thấy `$forbid` sau cùng sẽ là:
+At this point, I also used the `like` function to bruteforce the flag, but it took a lot of effort because it was banned a lot. Even if you can find a banned character like `_` or `b|x|y|z`, you still can't find the character after that. At this point, I reread the code and discovered a code logic that allows us to exploit it by `bruteforce`. Let's look at `$forbid`, why not put it all in one line but use string concatenation? If we look more closely, we can see that the last `$forbid` will be:
 
 ```php
 $forbid = "0x|0b|limit|glob|php|load|inject|month|day|now|collationlike|regexp|limit|_|information|schema|char|sin|cos|asin|procedure|trim|pad|make|midsubstr|compress|where|code|replace|conv|insert|right|left|cast|ascii|x|hex|version|data|load_file|out|gcc|locate|count|reverse|b|y|z|--"
 ```
 
-khi này cuối chuỗi đầu sẽ nối vào phần đầu của chuỗi thứ 2 tạo ra phần tử `midsubstr`, ta có thể bypass được vì code trên kiểm tra tồn tại của phần từ trong input chứ k phải kiểm tra theo dạng chuỗi con từ input
+At this time, the end of the first string will be appended to the beginning of the second string, creating the element `midsubstr`, we can bypass it because the above code checks the existence of the element in the input, not the substring from the input
 
-ta có thể dùng `mid` để khai thác chính xác vị trí thay vì `substr` vì bị cấm mất kí tự `b`, những vị trí hiện `forbidden` sẽ chính là `_` hay `b|x|y|z`
+We can use `mid` to exploit the exact position instead of `substr` because the character `b` is forbidden, the positions currently `forbidden` will be `_` or `b|x|y|z`
 
 payload: ```'or(mid((select(min(`flag`))from`flag`),1,7)='PTITCTF')or'```
 
 ![imager](./image/ptitctf2025/5.png)
 
-tiếp theo tôi đã viết một `script` để `bruteforce` flag, nếu tại vị trí k tìm được thì thay bằng `?`
+Next I wrote a `script` to `bruteforce` the flag, if at the position it can't be found then replace it with `?`
 
 ```python
 import requests
@@ -120,35 +123,35 @@ if __name__ == "__main__":
 
 ![image](./image/ptitctf2025/6.png)
 
-tôi đã thử và flag là `PTITCTF{n0_w4f_c4n_st0p_m3}`
+flag: `PTITCTF{n0_w4f_c4n_st0p_m3}`
 
 ## Web_1
 
-tại màn hình đăng nhập tôi đã thử thành công với `username=admin" --` và `password=<anything>` 
+at the login screen i tried successfully with `username=admin" --` and `password=<anything>`
 
 ![image](./image/ptitctf2025/7.png)
 
-nhưng hầu như k có gì ngoài giao diện `upload` thoạt nhìn tôi nghĩ đến đây là file upload nhưng k phải v, hãy cũng thử up gì đó lên
+but there is almost nothing but the `upload` interface at first glance I thought this was an upload file but it is not, let's try uploading something
 
 ![image](./image/ptitctf2025/8.png)
 
 ![image](./image/ptitctf2025/9.png)
 
-hệ thống phía sau đã bỏ qua các đuôi file nguy hiểm, tôi đã thử bấm vào đường dẫn file mới upload thì ngay lập tức tải về
+The back end system ignored the dangerous file extensions, I tried clicking on the newly uploaded file link and it downloaded immediately.
 
 ![image](./image/ptitctf2025/10.png)
 
-tôi thử với lỗ hổng `pathtraversal` để tìm tới `/etc/passwd`
+I tried with the `pathtraversal` vulnerability to find `/etc/passwd`
 
 ![image](./image/ptitctf2025/11.png)
 
 ![image](./image/ptitctf2025/12.png)
 
-chúng ta có thể thấy đã thành công lấy được nó, tiếp tục hãy thử lấy `flag.txt`
+we can see we successfully got it, let's try to get `flag.txt` next
 
 ![iamge](./image/ptitctf2025/13.png)
 
-ta k thấy nó, có thể nó được ẩn đâu đó, do server được code bằng python nên tôi đã thử tìm đến `app.py` hoặc `main.py`, ... và thấy được sorce code.
+I don't see it, maybe it's hidden somewhere, because the server is coded in python so I tried to find `app.py` or `main.py`, ... and saw the source code.
 
 ![image](./image/ptitctf2025/14.png)
 
@@ -355,7 +358,7 @@ if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
 ```
 
-tôi đã phân tích một lúc và k thấy được nhiều điều, hoặc có thể tôi đã k nhìn ra, tiếp tục tôi đã tìm đến môi trường này `/proc/self/environ` và thấy được nơi chứa `flag`
+I analyzed for a while and didn't see much, or maybe I didn't see it, then I went to this environment `/proc/self/environ` and saw where the `flag` is
 
 ![image](./image/ptitctf2025/15.png)
 
@@ -367,7 +370,7 @@ flag: `PTITCTF{SQL_nahhhh_P4th_Tr4v3rS1}`
 
 ## Web_2
 
-đây là một thử thách về `jwt` chuyển đổi thuật toán từ `rs256 -> hs256` bằng công cụ để thao tác. Để làm được điều này ta cần có file key, tôi đã tìm được dựa vào `dirsearch`
+this is a challenge about `jwt` algorithm conversion from `rs256 -> hs256` using tool to manipulate. To do this we need key file, I found it based on `dirsearch`
 
 ![image](./image/ptitctf2025/18.png)
 
@@ -375,9 +378,9 @@ flag: `PTITCTF{SQL_nahhhh_P4th_Tr4v3rS1}`
 
 ![image](./image/ptitctf2025/19.png)
 
-tool để chuyển đổi từ `rs256 -> hs256` là [JWTconverter](https://github.com/Logeirs/JWTconverter)
+tool to convert from `rs256 -> hs256` is [JWTconverter](https://github.com/Logeirs/JWTconverter)
 
-để thực hiện được ta cần tạo file `pubkey.pem` dựa vào thông tin từ file `/.well-known/jwks.json`
+to do this we need to create a `pubkey.pem` file based on information from the `/.well-known/jwks.json` file
 
 ```python
 from Crypto.PublicKey import RSA
@@ -400,7 +403,7 @@ with open("pubkey.pem", "wb") as f:
 
 ![image](./image/ptitctf2025/20.png)
 
-trước đó ta phải sửa `role` trong `json` thành `amdin` để tạo `token` rồi mới chuyển đổi (hãy chỉnh sửa trực tiếp trong `burpsuite` với extension `JSON Web Tokens`)
+before that we have to change `role` in `json` to `amdin` to create `token` and then convert (edit directly in `burpsuite` with extension `JSON Web Tokens`)
 
 ![image](./image/ptitctf2025/21.png)
 
@@ -412,11 +415,11 @@ flag: `PTITCTF{WOWWW_JSON_W3b_T0k3n}`
 
 ## Web_3
 
-đây là một web cơ bản với chức năng nhận đáp án và server hiển thị ra, tôi đã thử truyền dữ liệu thành `application/x-www-form-urlencoded` để xem phản hồi
+this is a basic web with the function of receiving the answer and the server displaying it, i tried passing the data as `application/x-www-form-urlencoded` to see the response
 
 ![image](./image/ptitctf2025/24.png)
 
-server phản hồi có thể sử dụng `application/xml`, khả năng cao là chúng ta có thể khai thác lỗ hổng `XXE`. Dựa vào việc server xử lý ở key là `answer` nên tôi đã custom payload để gửi lên
+The server response can use `application/xml`, there is a high possibility that we can exploit the `XXE` vulnerability. Based on the server processing at the key is `answer`, I have customized the payload to send
 
 ![image](./image/ptitctf2025/25.png)
 
@@ -430,7 +433,7 @@ payload
 </root>
 ```
 
-và tiếp tục tôi đã truy cập vào `/app/app.py` để xem code và đường dẫn đến `flag` nằm ở đó
+and then I went to `/app/app.py` to see the code and the path to the `flag` was there
 
 ![image](./image/ptitctf2025/26.png)
 
@@ -440,20 +443,20 @@ flag: `PTITCTF{xml_3xtern41_Ent1Ty_4TT4ck}`
 
 ## Web_5
 
-chúng ta được cung cấp sorce lớn để kiểm tra, dây là ứng dụng game được viết bằng `Django` và có các thôgn tin như game, employee, scoreboard, level, release. ta có thể thấy được flag sẽ nằm trong `seed.py` tại trường có `id=17`
-- tại `serializer.py` là các đối tượng.
-- tại `views.py` chính là các đối tượng chế độ xem
-- tại `urls.py` là các đường dẫn `API`
+we are given a large source to test, this is a game application written in `Django` and has information like game, employee, scoreboard, level, release. we can see the flag will be in `seed.py` at the field with `id=17`
+- at `serializer.py` are the objects.
+- at `views.py` are the view objects
+- at `urls.py` are the `API` paths
 
-trước tiên ta cần truy cập web và xem thông tin
+first we need to access the web and see the information
 
 ![image](./image/ptitctf2025/28.png)
 
-từ file `seed.py` ta có thể thấy flag nằm trong `body` của trường thông tin. Từ đó tôi đã xem các class và thấy rằng tại `class ScoreboardView` sẽ gọi đến `ScoreboardSerializer(scoreboard, many=True)`
+from the `seed.py` file we can see the flag is in the `body` of the information field. From there I looked at the classes and saw that at the `ScoreboardView` class will call `ScoreboardSerializer(scoreboard, many=True)`
 
 ![image](./image/ptitctf2025/29.png)
 
-và đối tượng `ScoreboardSerializer` lại có gọi đến `GameSerializer` và trong đây có chứa và hiển thị ra body các đối tượng, hãy thử truy cập đến `/api/scoreboard` ta sẽ thấy `flag`
+and the `ScoreboardSerializer` object calls `GameSerializer` and in here contains and displays the body of the objects, try accessing `/api/scoreboard` we will see `flag`
 
 ![image](./image/ptitctf2025/30.png)
 
@@ -461,7 +464,7 @@ flag: `PTITCTF{ByP4ss_4uth3n_By_G4m3}`
 
 ## Web_4
 
-tôi chỉ khai thác được bước đầu của thử thách này và vẫn đang chờ đợi cách xử lý khác. Trong thử thách này chúng ta cần quan sát các file quan trọng tại: `sandbox.py` và `views.py`
+I have only exploited the first step of this challenge and am still waiting for other solutions. In this challenge we need to observe the important files at: `sandbox.py` and `views.py`
 
 `views.py`
 
@@ -600,17 +603,17 @@ def unpickle(data):
     return RestrictedUnpickler(BytesIO(b64decode(data))).load()
 ```
 
-phần đầu của thử thách chính là tại `views.py`, quan sát và thấy rằng:
-- tại tính năng đăng kí, mật khẩu sẽ được lưu trực tiếp dạng `plaintext`
+the first part of the challenge is in `views.py`, observe and see that:
+- in the registration feature, the password will be saved directly as `plaintext`
 
 ```
 user = User.objects.create(**user_data)
 ```
-- tại tính năng trang chủ có chức năng tìm kiếm theo dữ liệu mà người dùng nhập vào:
+- in the home page feature there is a search function based on the data entered by the user:
 
 ![image](./image/ptitctf2025/31.png)
 
-chúng ta có thể thấy có thể tự thêm vào các trường để sử dụng, đây chính là `Lookup Django ORM`, theo đó ta có thể chèn thêm `password__regex`, `username__contains`, `username__startswith` để tận dụng khai thác `bruteforce` tìm mật khẩu `admin`, tiếp theo tại `Dockerfile` ta có thể thấy mật khẩu `admin` sẽ được tạo ngẫu nhiên khi khởi chạy và `format` là : [a-zA-Z0-9], admin có `id=1`
+We can see that we can add fields to use, this is the `Lookup Django ORM`, accordingly we can insert `password__regex`, `username__contains`, `username__startswith` to take advantage of `bruteforce` exploitation to find the `admin` password, next in `Dockerfile` we can see that the `admin` password will be randomly generated when launched and the `format` is: [a-zA-Z0-9], admin has `id=1`
 
 `Dockerfile`
 
@@ -647,11 +650,11 @@ USER ctf
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
 
-đến đây tôi đã dùng `password__regex` để `bruteforce` đúng các kí tự hoa, thường, số. Nếu dùng `__startswith` sẽ chỉ thu thập được mật khẩu ở dạng thường.
+Here I used `password__regex` to `bruteforce` the correct uppercase, lowercase, and numeric characters. If I used `__startswith` it would only collect the password in normal form.
 
 ![image](./image/ptitctf2025/32.png)
 
-khi đúng sẽ thấy được đúng thôgn tin cuả `admin` theo `username` đã nhập
+When correct, the correct information of `admin` will be shown according to the entered `username`
 
 ![image](./image/ptitctf2025/33.png)
 
@@ -771,10 +774,13 @@ if __name__ == "__main__":
 
 ![image](./image/ptitctf2025/34.png)
 
-admin password: `ufm2zYo8SLc8PC0NhJhAdgFsdGnVDgZjhBfhtGjNhu9Cxof8eWhep6CWvFxNVuzstDvTwvF9Wk8CdcntV9r5mxxC2DKL6aRH7RcxBbX47fEbZ61tfI21NFVQrIsSWYsj`
+admin password: 
+```text
+ufm2zYo8SLc8PC0NhJhAdgFsdGnVDgZjhBfhtGjNhu9Cxof8eWhep6CWvFxNVuzstDvTwvF9Wk8CdcntV9r5mxxC2DKL6aRH7RcxBbX47fEbZ61tfI21NFVQrIsSWYsj
+```
 
 ![image](./image/ptitctf2025/35.png)
 
-ở lỗ hổng tiếp theo nằm ở việc bypass `sanbox.py` để tạo ra dữ liệu độc hại qua việc lợi dụng `pickle` của python nhưng tôi chưa khai thác được :(((
+The next vulnerability lies in bypassing `sanbox.py` to create malicious data by exploiting python's `pickle` but I haven't exploited it yet :(((
 
 
